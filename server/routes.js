@@ -48,6 +48,7 @@ module.exports = (params) => {
     next();
   });
 
+  // log all access. This most likely can be turned off as the logs will be huge
   router.use((req, res, next) => {
     const ip = getIp(req);
     // eslint-disable-next-line max-len
