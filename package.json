@@ -1,6 +1,6 @@
 {
   "name": "loadbalancer",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "Load balancer for chat rooms",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,7 @@
     "microservice"
   ],
   "author": "Billy Marin",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/billymfl/loadbalancer/issues"
   },
