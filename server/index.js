@@ -3,9 +3,10 @@
 // handles request for least loaded based on data from edges
 
 const {NODE_ENV, KEY, PORT} = require('../config');
+const pkg = require('../package.json');
 const logger = require('../models/Logger');
 const config = {
-  version: '2.0.0',
+  version: pkg.version,
   key: KEY,
 };
 const msg = `Loadbalancer ${config.version} is starting in ${NODE_ENV} mode...`;
