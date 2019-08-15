@@ -8,4 +8,5 @@ test
 README.md
 Dockerfile
 .git
+docs
 .DS_Store

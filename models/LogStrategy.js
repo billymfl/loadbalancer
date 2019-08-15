@@ -26,16 +26,17 @@ class LogStrategy {
   }
 
   /**
-   * getStrategy
-   * @return {string} The chosen logging strategy
+   * Returns the chosen strategy
+   * @return {string}
    */
   getStrategy() {
     return this.strategy;
   }
 
   /**
-  * Private initializer for the selected strategy.
+  * Initializer for the selected strategy.
   * NOTE: Options must be passed in as ENV vars. See env.example file
+  * @private
   * @return {object}
   */
   _init() {
@@ -93,14 +94,16 @@ class LogStrategy {
     }
   }
 
-  /**
+  /** Method to log to log4js
+   * @private
    * @param  {string} message
    */
   _toLog4j(message) {
     this.logger.info(message);
   }
 
-  /**
+  /** Method to log to splunk
+   * @private
    * @param {string} message
    */
   _toSplunk(message) {
@@ -111,7 +114,8 @@ class LogStrategy {
   }
 
   /**
-  * toConsole logs to console
+  * Method to log to console
+  * @private
   * @param {string} message
   */
   _toConsole(message) {
@@ -120,7 +124,8 @@ class LogStrategy {
   }
 
   /**
-  * No logging
+  * Method to turn off logging
+  * @private
   * @param {string} message
   */
   _none(message) {
