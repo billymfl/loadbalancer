@@ -81,7 +81,7 @@ Run loadbalancer instance from the already built image (and set a KEY for the lb
 docker run --rm -p 80:80 -e "KEY=<KEY>" --name lb --network lb_micro --log-driver=splunk --log-opt splunk-token=<SPLUNK_TOKEN> --log-opt splunk-url=https://0.0.0.0:8088 --log-opt splunk-insecureskipverify=true loadbalancer:2.0
 ```
 
-Registering a server on the loadbalancer
+<a name="registering"></a>Registering a server on the loadbalancer
 ```bash
 curl --insecure -X PUT -H "X-API-Key: <KEY>" https://0.0.0.0:80/register/http%3A%2F%2Fwww.testing.com/26/10/1.1
 ```

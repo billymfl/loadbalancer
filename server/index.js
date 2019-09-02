@@ -9,67 +9,50 @@ const config = {
   version: pkg.version,
   key: KEY,
 };
-const msg = `Loadbalancer ${config.version} is starting in ${NODE_ENV} mode...`;
+const msg = `${pkg.name} ${config.version} is starting in ${NODE_ENV} mode...`;
 logger.log(msg);
 
-const fs = require('fs');
-const https = require('https');
+// const fs = require('fs');
+const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
-const helmet = require('helmet');
-const hidePoweredBy = require('hide-powered-by');
-const nocache = require('nocache');
+// const nocache = require('nocache');
 const routes = require('./routes');
 const Registry = require('../models/Registry');
 
 const app = express();
 
 // set up SSL
-let key;
-let cert;
+// let key;
+// let cert;
 // let dh;
 
-try {
-  key = fs.readFileSync('./keys/local.key');
-  cert = fs.readFileSync('./keys/local.cert');
-  // Diffie–Hellman, stronger 2048 bit key for key exchange
-  // dh = fs.readFileSync('./keys/local-dh.pem');
-} catch (err) {
-  logger.log(`Failed to load key or certificate for SSL: ${err.message}`);
-  // if logging to splunk we need to wait before exiting
-  setTimeout(() => {
-    process.exit(1);
-  }, 2000);
-}
+// try {
+//   key = fs.readFileSync('./keys/local.key');
+//   cert = fs.readFileSync('./keys/local.cert');
+//   // Diffie–Hellman, stronger 2048 bit key for key exchange
+//   // dh = fs.readFileSync('./keys/local-dh.pem');
+// } catch (err) {
+//   logger.log(`Failed to load key or certificate for SSL: ${err.message}`);
+//   // if logging to splunk we need to wait before exiting
+//   setTimeout(() => {
+//     process.exit(1);
+//   }, 2000);
+// }
 
-let server;
 let interval;
 
-// if we got a key and cert we can continue
-if (key && cert) {
-  const options = {
-    key: key,
-    cert: cert,
-    // dhparam: dh,
-  };
+app.use(bodyParser.urlencoded({extended: true}));
+// app.use(nocache());
+app.disable('x-powered-by');
+app.use('/', routes({config}));
 
-  app.use(bodyParser.urlencoded({extended: true}));
-  app.use(helmet());
-  app.use(hidePoweredBy());
-  app.use(nocache());
-  app.use('/', routes({config}));
+const server = http.createServer(app).listen(PORT, function() {
+  logger.log(`${pkg.name} listening at http://0.0.0.0:${this.address().port}`);
 
-  server = https.createServer(options, app).listen(PORT, function() {
-    logger.log(`App listening at https://0.0.0.0:${this.address().port}`);
-
-    interval = setInterval(() => {
-      Registry.cleanup();
-    }, 30000);
-  });
-}
-
-process.on('uncaughtException', (err, origin) => {
-  logger.log(`uncaughtException: ${err}`);
+  interval = setInterval(() => {
+    Registry.cleanup();
+  }, 30000);
 });
 
 process.on('SIGTERM', () => {
@@ -80,7 +63,6 @@ process.on('SIGTERM', () => {
     process.exit(0);
   });
 });
-
 
 module.exports = {
   app,

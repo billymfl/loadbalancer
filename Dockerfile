@@ -8,5 +8,8 @@ RUN npm ci --only=production
 
 COPY . .
 
+ENV NODE_ENV=production
+
 EXPOSE 80
-CMD [ "npm", "start" ]
+#CMD [ "npm", "start" ]
+ENTRYPOINT ["npm", "start"]
